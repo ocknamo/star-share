@@ -1,0 +1,82 @@
+@import "~src/app/styles/common";
+
+.toolbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgb(255, 255, 255);
+  color: rgb(29, 29, 29);
+  font-weight: 600;
+  padding: 0 1em;
+}
+
+.toolbar .info {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 50%;
+  background-color: rgb(254, 242, 255);
+  color: rgb(27, 167, 177);
+  border-radius: 1em;
+
+  @media (max-width: $mobile-breake-point) {
+    display: none;
+  }
+}
+
+.toolbar .info-button {
+  color: rgb(27, 167, 177);
+  background-color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 50%;
+
+  @media (min-width: $mobile-breake-point) {
+    display: none;
+  }
+}
+
+.toolbar .item {
+  margin: 0 1em;
+}
+
+.toolbar .title {
+  font-size: 1.2em;
+  font-family: Kanit, sans-serif;
+  font-weight: 800;
+  line-height: 60px;
+  margin: 0 20px;
+}
+
+// main menu
+.contents-menu {
+  display: flex;
+
+  .link {
+    line-height: 60px;
+    padding: 0 24px;
+    border-left-style: solid;
+    border-color: rgb(170, 249, 255);
+    border-width: 0.5px;
+    background-color: rgb(255, 255, 255);
+    color: rgb(29, 29, 29);
+
+    @media (max-width: $mobile-breake-point) {
+      padding: 0 16px;
+    }
+  }
+}
+
+// manu item
+.menu-item {
+  margin-left: 4px;
+  color: rgb(254, 242, 255);
+  font-size: 0.8em;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+  white-space: nowrap;
+}

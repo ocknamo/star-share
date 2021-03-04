@@ -1,1 +1,31 @@
-/* You can add global styles to this file, and also import other style files */
+@import "~src/app/styles/common";
+
+$toolbar-height: 60px;
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: rgb(239, 239, 240);
+  height: calc(100% - #{$toolbar-height});
+}
+
+.page-wrapper {
+  margin-top: $toolbar-height;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 150px;
+
+  @media (max-width: $mobile-breake-point) {
+    padding: 2rem 16px 16px;
+  }
+}
+
+a {
+  outline: none;
+  text-decoration: none;
+}

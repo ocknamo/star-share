@@ -1,0 +1,25 @@
+<div class="page-wrapper">
+  <div class="contents">
+    <div class="message item" role="message">Upload file!</div>
+    <div class="item">
+      <button
+        mat-icon-button
+        class="upload-button"
+        aria-label="file upload icon-button"
+        (click)="onUploadButtonClick()"
+      >
+        <mat-icon class="upload-icon">file_upload</mat-icon>
+      </button>
+    </div>
+    <div class="item">{{ fileName }}</div>
+    <div *ngIf="cid" class="item">CID: {{ cid }}</div>
+  </div>
+</div>
+
+<input
+  #file
+  id="file"
+  type="file"
+  class="file-input"
+  (change)="processFile(file)"
+/>

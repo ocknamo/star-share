@@ -1,0 +1,30 @@
+<!-- Toolbar -->
+<div class="toolbar" role="banner">
+  <div class="contents-menu">
+    <div class="title">{{ title | titlecase }}</div>
+    <a routerLink="/upload" class="link" role="link">upload</a>
+    <a routerLink="/download" class="link" role="link">download</a>
+  </div>
+  <div class="info">
+    <div class="item" role="id">ID: {{ id }}</div>
+    <div class="item" role="agent version">
+      Agent Version: {{ agentVersion }}
+    </div>
+  </div>
+
+  <button
+    class="info-button"
+    mat-icon-button
+    [matMenuTriggerFor]="menu"
+    aria-label="info icon-button with a menu"
+  >
+    <mat-icon>info</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <div class="menu-item" role="description">IPFS node info</div>
+    <div class="menu-item" role="id">ID: {{ id }}</div>
+    <div class="menu-item" role="agent version">
+      Agent Version: {{ agentVersion }}
+    </div>
+  </mat-menu>
+</div>

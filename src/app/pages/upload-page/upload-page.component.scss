@@ -1,0 +1,21 @@
+@import "~src/app/styles/page";
+
+.contents .item {
+  margin-bottom: 8px;
+}
+
+.upload-button {
+  height: $button-size;
+  width: $button-size;
+}
+.upload-icon {
+  color: rgb(27, 167, 177);
+  line-height: $button-size;
+  font-size: $button-size;
+  height: $button-size;
+  width: $button-size;
+}
+
+.file-input {
+  display: none;
+}

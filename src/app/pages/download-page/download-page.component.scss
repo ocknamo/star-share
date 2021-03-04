@@ -1,0 +1,38 @@
+@import "~src/app/styles/common";
+@import "~src/app/styles/page";
+
+.contents .item {
+  margin-bottom: 8px;
+}
+
+.label-text {
+  color: rgb(27, 167, 177);
+  border-bottom: solid black;
+}
+
+.form {
+  min-width: 430px;
+  max-width: 500px;
+  width: 100%;
+
+  @media (max-width: $mobile-breake-point) {
+    min-width: 300px;
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+
+.download-button {
+  height: $button-size;
+  width: $button-size;
+}
+
+.download-icon {
+  color: rgb(27, 167, 177);
+  line-height: $button-size;
+  font-size: $button-size;
+  height: $button-size;
+  width: $button-size;
+}
