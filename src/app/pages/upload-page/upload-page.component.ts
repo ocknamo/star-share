@@ -42,14 +42,6 @@ export class UploadPageComponent implements OnInit {
 
     const ipfs = this.ipfsService.get();
 
-    // // Upload file with MFS API
-    // await ipfs.files.write(path, this.file, { create: true });
-
-    // // Get status
-    // const status = await ipfs.files.stat(path);
-
-    // this.cid = String(status.cid);
-
     // add API
     // Upload file
     const status = await ipfs.add(this.file, { pin: true });
