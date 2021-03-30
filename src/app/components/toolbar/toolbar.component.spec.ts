@@ -1,4 +1,6 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatMenuModule } from '@angular/material/menu';
 
 import { ToolbarComponent } from './toolbar.component';
 
@@ -9,6 +11,8 @@ describe('ToolbarComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ToolbarComponent],
+      imports: [MatMenuModule],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   });
 
