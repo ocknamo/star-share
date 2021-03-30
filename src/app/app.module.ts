@@ -10,7 +10,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ToolbarComponent } from './components';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { DownloadPageComponent, UploadPageComponent } from './pages';
+import {
+  DownloadPageComponent,
+  PageNotFoundComponent,
+  UploadPageComponent,
+} from './pages';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgIpfsModule } from 'ng-ipfs-service';
 
@@ -20,6 +24,7 @@ import { NgIpfsModule } from 'ng-ipfs-service';
     ToolbarComponent,
     UploadPageComponent,
     DownloadPageComponent,
+    PageNotFoundComponent,
   ],
   imports: [
     BrowserModule,
