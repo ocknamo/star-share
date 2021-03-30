@@ -40,7 +40,7 @@ export class UploadPageComponent implements OnInit {
     this.fileName = this.file.name;
     const path = `/${this.fileName}`;
 
-    const ipfs = this.ipfsService.get();
+    const ipfs = await this.ipfsService.get();
 
     // add API
     // Upload file

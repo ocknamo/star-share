@@ -36,7 +36,13 @@
               "src/styles.scss"
             ],
             "scripts": [],
-            "allowedCommonJsDependencies": ["uint8arrays", "ipfs-core"]
+            "allowedCommonJsDependencies": [
+              "uint8arrays",
+              "ipfs-core",
+              "console-browserify",
+              "util",
+              "assert"
+            ]
           },
           "configurations": {
             "production": {

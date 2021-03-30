@@ -70,7 +70,9 @@ export class DownloadPageComponent implements OnInit {
 
   private async handleCID(cid: string): Promise<void> {
     // @TODO: Error handring and messageing.
-    const files = this.ipfsService.get().get(cid, { timeout: FETCH_TIMEOUT });
+    const files = (await this.ipfsService.get()).get(cid, {
+      timeout: FETCH_TIMEOUT,
+    });
 
     for await (const file of files) {
       if (file.type !== 'file') {

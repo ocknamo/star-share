@@ -12,6 +12,7 @@ import { ToolbarComponent } from './components';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DownloadPageComponent, UploadPageComponent } from './pages';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgIpfsModule } from 'ng-ipfs-service';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatProgressSpinnerModule,
     FormsModule,
     ReactiveFormsModule,
+    NgIpfsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
