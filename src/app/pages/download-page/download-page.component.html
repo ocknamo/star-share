@@ -4,7 +4,7 @@
     <div class="item">
       <form class="form">
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label class="label-text">CID</mat-label>
+          <mat-label class="label-text">CID*</mat-label>
           <input
             matInput
             [formControl]="cidFormControl"
@@ -22,6 +22,18 @@
             Please enter a valid CID
           </mat-error>
           <mat-hint> Input CID of the file. </mat-hint>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label class="label-text">File name</mat-label>
+          <input
+            matInput
+            [formControl]="fileNameFormControl"
+            placeholder="Ex. cat.jpeg"
+          />
+          <mat-error *ngIf="fileNameFormControl.hasError('maxlength')">
+            Too long file name.
+          </mat-error>
+          <mat-hint> Input file name if you know. </mat-hint>
         </mat-form-field>
       </form>
     </div>
