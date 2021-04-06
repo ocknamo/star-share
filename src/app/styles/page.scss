@@ -1,4 +1,5 @@
 $button-size: 60px;
+$sp-copy-button-size: 30px;
 
 .contents {
   background-color: rgb(255, 255, 255);
@@ -11,4 +12,10 @@ $button-size: 60px;
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  .message {
+    color: rgb(27, 167, 177);
+    font-size: 1.6em;
+    font-weight: 500;
+  }
 }

@@ -13,6 +13,10 @@
   color: rgb(29, 29, 29);
   font-weight: 600;
   padding: 0 1em;
+
+  @media (max-width: $sm-mobile-breake-point) {
+    padding: 0;
+  }
 }
 
 .toolbar .info {
@@ -50,6 +54,7 @@
   font-weight: 800;
   line-height: 60px;
   margin: 0 20px;
+  white-space: nowrap;
 }
 
 // main menu
@@ -74,9 +79,13 @@
 // manu item
 .menu-item {
   margin-left: 4px;
-  color: rgb(254, 242, 255);
+  color: rgb(27, 167, 177);
   font-size: 0.8em;
   text-overflow: ellipsis;
   overflow-x: hidden;
   white-space: nowrap;
+}
+
+.description {
+  font-size: 1.2em;
 }
