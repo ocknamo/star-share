@@ -1,13 +1,18 @@
+@import "~src/app/styles/common";
 @import "~src/app/styles/page";
 
 .contents .item {
   margin-bottom: 8px;
+  @media (max-width: $mobile-breake-point) {
+    margin-bottom: 16px;
+  }
 }
 
 .upload-button {
   height: $button-size;
   width: $button-size;
 }
+
 .upload-icon {
   color: rgb(27, 167, 177);
   line-height: $button-size;
@@ -18,4 +23,50 @@
 
 .file-input {
   display: none;
+}
+
+.copy-parent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  @media (max-width: $mobile-breake-point) {
+    flex-direction: column;
+  }
+}
+
+.copy-value {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 430px;
+  color: rgba(119, 119, 119);
+
+  .key {
+    color: rgb(27, 167, 177);
+  }
+
+  @media (max-width: $mobile-breake-point) {
+    max-width: 300px;
+  }
+}
+
+.copy-button {
+  width: 40px;
+  margin: 0 8px;
+  color: rgb(27, 167, 177);
+
+  @media (max-width: $mobile-breake-point) {
+    height: $sp-copy-button-size;
+    width: $sp-copy-button-size;
+  }
+}
+
+.copy-icon {
+  @media (max-width: $mobile-breake-point) {
+    line-height: $sp-copy-button-size;
+    font-size: $sp-copy-button-size;
+    height: $sp-copy-button-size;
+    width: $sp-copy-button-size;
+  }
 }

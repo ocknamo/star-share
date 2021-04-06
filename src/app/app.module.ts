@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -37,6 +38,7 @@ import { NgIpfsModule } from 'ng-ipfs-service';
     MatProgressSpinnerModule,
     FormsModule,
     ReactiveFormsModule,
+    ClipboardModule,
     NgIpfsModule,
   ],
   providers: [],

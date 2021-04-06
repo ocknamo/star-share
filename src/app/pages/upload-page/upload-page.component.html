@@ -12,8 +12,34 @@
       </button>
     </div>
     <div class="item">{{ fileName }}</div>
-    <div *ngIf="cid" class="item">CID: {{ cid }}</div>
-    <div *ngIf="downloadUrl" class="item">Download URL: {{ downloadUrl }}</div>
+    <div *ngIf="cid" class="item copy-parent">
+      <div class="copy-value"><span class="key">CID: </span>{{ cid }}</div>
+      <div>
+        <button
+          mat-icon-button
+          class="copy-button"
+          aria-label="button to copy CID"
+          [cdkCopyToClipboard]="cid"
+        >
+          <mat-icon class="copy-icon">content_copy</mat-icon>
+        </button>
+      </div>
+    </div>
+    <div *ngIf="downloadUrl" class="item copy-parent">
+      <div class="copy-value">
+        <span class="key">URL: </span>{{ downloadUrl }}
+      </div>
+      <div>
+        <button
+          mat-icon-button
+          class="copy-button"
+          aria-label="button to copy CID"
+          [cdkCopyToClipboard]="downloadUrl"
+        >
+          <mat-icon class="copy-icon">content_copy</mat-icon>
+        </button>
+      </div>
+    </div>
   </div>
 </div>
 
