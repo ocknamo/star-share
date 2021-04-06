@@ -15,6 +15,10 @@ $sp-copy-button-size: 30px;
   flex-direction: column;
   align-items: center;
 
+  @media (max-width: $sm-mobile-breake-point) {
+    max-width: 272px;
+  }
+
   .message {
     color: $thema-color;
     font-size: 1.6em;
