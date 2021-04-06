@@ -6,7 +6,7 @@
 }
 
 .label-text {
-  color: rgb(27, 167, 177);
+  color: $thema-color;
   border-bottom: solid black;
 }
 
@@ -30,7 +30,7 @@
 }
 
 .download-icon {
-  color: rgb(27, 167, 177);
+  color: $thema-color;
   line-height: $button-size;
   font-size: $button-size;
   height: $button-size;

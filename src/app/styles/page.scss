@@ -1,3 +1,5 @@
+@import "~src/app/styles/common";
+
 $button-size: 60px;
 $sp-copy-button-size: 30px;
 
@@ -14,7 +16,7 @@ $sp-copy-button-size: 30px;
   align-items: center;
 
   .message {
-    color: rgb(27, 167, 177);
+    color: $thema-color;
     font-size: 1.6em;
     font-weight: 500;
   }
