@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --stats-json",
     "test": "jest",
     "test:coverage": "jest --coverage",
     "lint": "ng lint",
@@ -12,7 +12,8 @@
     "format": "yarn prettier --write .",
     "ci:build": "yarn build --prod",
     "ci:test": "yarn test:coverage",
-    "ci:format-and-lint": "yarn lint && yarn format && git diff --exit-code"
+    "ci:format-and-lint": "yarn lint && yarn format && git diff --exit-code",
+    "bundle-status": "webpack-bundle-analyzer dist/star-share/stats.json"
   },
   "private": true,
   "dependencies": {
@@ -60,7 +61,8 @@
     "protractor": "~7.0.0",
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
-    "typescript": "~4.1.2"
+    "typescript": "~4.1.2",
+    "webpack-bundle-analyzer": "^4.4.0"
   },
   "jest": {
     "preset": "jest-preset-angular",
