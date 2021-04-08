@@ -56,6 +56,6 @@ export class UploadPageComponent implements OnInit {
   private getDownloadUrl(cid: string) {
     const baseUrl = window.location.origin;
 
-    return `${baseUrl}/download?CID=${this.cid}&fileName=${this.fileName}`;
+    return `${baseUrl}/#/download?CID=${this.cid}&fileName=${this.fileName}`;
   }
 }
