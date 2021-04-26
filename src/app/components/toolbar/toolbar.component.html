@@ -1,7 +1,9 @@
 <!-- Toolbar -->
 <div class="toolbar" role="banner">
   <div class="contents-menu">
-    <div class="title">{{ title | titlecase }}</div>
+    <div class="title">
+      {{ title | titlecase }} <span class="version">beta</span>
+    </div>
     <a routerLink="/upload" class="link" role="link">upload</a>
     <a routerLink="/download" class="link" role="link">download</a>
   </div>
