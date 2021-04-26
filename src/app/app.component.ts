@@ -2,6 +2,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { NgIpfsService } from 'ng-ipfs-service';
 import { IPFSConfig } from 'ipfs-core/src/components';
+import { SWARM_ADDRESSES } from './providers/app-config';
 
 @Component({
   selector: 'app-root',
@@ -14,18 +15,15 @@ export class AppComponent implements OnInit {
   agentVersion = 'loading...';
 
   constructor(
-    @Inject(NgIpfsService) private readonly ipfsService: NgIpfsService
+    @Inject(NgIpfsService) private readonly ipfsService: NgIpfsService,
+    @Inject(SWARM_ADDRESSES) private readonly swarmAddresses: string[]
   ) {}
 
   async ngOnInit(): Promise<void> {
     // Initialise IPFS node.
     const ipfsConfig: IPFSConfig = {
       Addresses: {
-        Swarm: [
-          // @Todo: Host my self.
-          '/dns4/wrtc-star1.par.dwebops.pub/tcp/443/wss/p2p-webrtc-star',
-          '/dns4/wrtc-star2.sjc.dwebops.pub/tcp/443/wss/p2p-webrtc-star',
-        ],
+        Swarm: this.swarmAddresses,
       },
       Discovery: {
         MDNS: { Enabled: true, Interval: 10 },
