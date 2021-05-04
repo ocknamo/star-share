@@ -70,3 +70,12 @@
     width: $sp-copy-button-size;
   }
 }
+
+.contents .error-title {
+  font-size: 1.5em;
+  color: tomato;
+}
+
+button:disabled {
+  opacity: 0.3;
+}

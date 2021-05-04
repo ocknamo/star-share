@@ -1,30 +1,55 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { NgIpfsService } from 'ng-ipfs-service';
-
-// interface FileInfo {
-//   fileName: string;
-// }
+import { Observable, Subject } from 'rxjs';
+import { filter, map, take, takeUntil } from 'rxjs/operators';
+import { AppStore } from 'src/app/store/store';
 
 @Component({
   selector: 'app-upload-page',
   templateUrl: './upload-page.component.html',
   styleUrls: ['./upload-page.component.scss'],
 })
-export class UploadPageComponent implements OnInit {
+export class UploadPageComponent implements OnInit, OnDestroy {
   input: HTMLInputElement;
   file: File;
   fileName: string | null = null;
   cid: string | null = null;
   downloadUrl: string | null = null;
+  isNodePreperd = false;
+
+  // Error
+  isError = false;
+  errorMessage = '';
+
+  onDestroy$ = new Subject();
 
   constructor(
     private readonly el: ElementRef,
     private readonly ipfsService: NgIpfsService,
-    private readonly route: ActivatedRoute
+    private readonly appStore: AppStore
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.appStore.isNodePreperd
+      .pipe(
+        filter((v) => v),
+        take(1),
+        takeUntil(this.onDestroy$)
+      )
+      .subscribe((v) => (this.isNodePreperd = v));
+
+    this.appStore.isNodeErrored
+      .asObservable()
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe((v) => {
+        this.isError = v.status;
+        this.errorMessage = v.message;
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.onDestroy$.next();
+  }
 
   onUploadButtonClick(): void {
     // Initialize input.

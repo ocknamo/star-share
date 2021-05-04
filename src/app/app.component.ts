@@ -3,6 +3,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { NgIpfsService } from 'ng-ipfs-service';
 import { IPFSConfig } from 'ipfs-core/src/components';
 import { SWARM_ADDRESSES } from './providers/app-config';
+import { AppActions } from './store/actions';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +17,8 @@ export class AppComponent implements OnInit {
 
   constructor(
     @Inject(NgIpfsService) private readonly ipfsService: NgIpfsService,
-    @Inject(SWARM_ADDRESSES) private readonly swarmAddresses: string[]
+    @Inject(SWARM_ADDRESSES) private readonly swarmAddresses: string[],
+    private readonly appActions: AppActions
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -31,12 +33,18 @@ export class AppComponent implements OnInit {
       },
     };
 
-    await this.ipfsService.start({
-      config: ipfsConfig,
-    });
-
-    const { id, agentVersion } = await (await this.ipfsService.get()).id();
-    this.id = id;
-    this.agentVersion = agentVersion;
+    try {
+      await this.ipfsService.start({
+        config: ipfsConfig,
+      });
+      const { id, agentVersion } = await (await this.ipfsService.get()).id();
+      this.id = id;
+      this.agentVersion = agentVersion;
+      this.appActions.nodeStarted();
+    } catch (error) {
+      this.appActions.nodeErrored(
+        'IPFS Node could not be started. Please take some time and try again.'
+      );
+    }
   }
 }

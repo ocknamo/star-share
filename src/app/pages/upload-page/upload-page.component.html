@@ -6,11 +6,14 @@
         mat-icon-button
         class="upload-button"
         aria-label="file upload icon-button"
+        [disabled]="!isNodePreperd"
         (click)="onUploadButtonClick()"
       >
         <mat-icon class="upload-icon">file_upload</mat-icon>
       </button>
     </div>
+    <div *ngIf="isError" class="item error-title">Error!</div>
+    <div *ngIf="isError" class="item error-message">{{ errorMessage }}</div>
     <div class="item">{{ fileName }}</div>
     <div *ngIf="cid" class="item copy-parent">
       <div class="copy-value"><span class="key">CID: </span>{{ cid }}</div>
