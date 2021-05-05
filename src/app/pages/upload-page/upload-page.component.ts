@@ -1,7 +1,9 @@
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { NgIpfsService } from 'ng-ipfs-service';
-import { Observable, Subject } from 'rxjs';
-import { filter, map, take, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { filter, take, takeUntil } from 'rxjs/operators';
+import { MsgDialogComponent, MsgDialogData } from 'src/app/components';
 import { AppStore } from 'src/app/store/store';
 
 @Component({
@@ -26,7 +28,8 @@ export class UploadPageComponent implements OnInit, OnDestroy {
   constructor(
     private readonly el: ElementRef,
     private readonly ipfsService: NgIpfsService,
-    private readonly appStore: AppStore
+    private readonly appStore: AppStore,
+    private readonly dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -76,6 +79,19 @@ export class UploadPageComponent implements OnInit, OnDestroy {
 
     this.cid = String(status.cid);
     this.downloadUrl = this.getDownloadUrl(this.cid);
+  }
+
+  downloadUrlCopyButtonClick(): void {
+    this.openDialog();
+  }
+
+  private openDialog() {
+    this.dialog.open<MsgDialogComponent, MsgDialogData>(MsgDialogComponent, {
+      data: {
+        title: 'Caution!',
+        msg: 'Please keep open this tab until the file downloaded.',
+      },
+    });
   }
 
   private getDownloadUrl(cid: string) {

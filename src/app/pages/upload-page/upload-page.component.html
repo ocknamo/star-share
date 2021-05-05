@@ -38,6 +38,7 @@
           class="copy-button"
           aria-label="button to copy CID"
           [cdkCopyToClipboard]="downloadUrl"
+          (click)="downloadUrlCopyButtonClick()"
         >
           <mat-icon class="copy-icon">content_copy</mat-icon>
         </button>
