@@ -1,5 +1,6 @@
 import { ElementRef, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogModule } from '@angular/material/dialog';
 import { NgIpfsService } from 'ng-ipfs-service';
 import { MockElementRef } from './../../test/mock';
 
@@ -26,6 +27,7 @@ describe('UploadPageComponent', () => {
           },
         },
       ],
+      imports: [MatDialogModule],
       declarations: [UploadPageComponent],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
