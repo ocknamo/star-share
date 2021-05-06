@@ -23,8 +23,13 @@
           class="copy-button"
           aria-label="button to copy CID"
           [cdkCopyToClipboard]="cid"
+          (click)="cidCopyButtonClick()"
         >
           <mat-icon class="copy-icon">content_copy</mat-icon>
+          <app-msg-tip
+            *ngIf="(handleCopyTip$ | async) === 'CID'"
+            [message]="'copied!'"
+          ></app-msg-tip>
         </button>
       </div>
     </div>
@@ -41,6 +46,10 @@
           (click)="downloadUrlCopyButtonClick()"
         >
           <mat-icon class="copy-icon">content_copy</mat-icon>
+          <app-msg-tip
+            *ngIf="(handleCopyTip$ | async) === 'DOWNLOAD_URL'"
+            [message]="'copied!'"
+          ></app-msg-tip>
         </button>
       </div>
     </div>

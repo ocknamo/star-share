@@ -23,6 +23,9 @@ export class UploadPageComponent implements OnInit, OnDestroy {
   isError = false;
   errorMessage = '';
 
+  // For handle copy tip
+  handleCopyTip$ = new Subject<'CID' | 'DOWNLOAD_URL'>();
+
   onDestroy$ = new Subject();
 
   constructor(
@@ -82,7 +85,12 @@ export class UploadPageComponent implements OnInit, OnDestroy {
   }
 
   downloadUrlCopyButtonClick(): void {
+    this.handleCopyTip$.next('DOWNLOAD_URL');
     this.openDialog();
+  }
+
+  cidCopyButtonClick(): void {
+    this.handleCopyTip$.next('CID');
   }
 
   private openDialog() {

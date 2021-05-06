@@ -9,7 +9,11 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { MsgDialogComponent, ToolbarComponent } from './components';
+import {
+  MsgDialogComponent,
+  MsgTipComponent,
+  ToolbarComponent,
+} from './components';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   DownloadPageComponent,
@@ -28,6 +32,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     DownloadPageComponent,
     PageNotFoundComponent,
     MsgDialogComponent,
+    MsgTipComponent,
   ],
   imports: [
     BrowserModule,
