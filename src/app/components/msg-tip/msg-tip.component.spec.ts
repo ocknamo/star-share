@@ -10,7 +10,7 @@ describe('MsgTipComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [MsgTipComponent],
-      imports: [NoopAnimationsModule]
+      imports: [NoopAnimationsModule],
     }).compileComponents();
   });
 

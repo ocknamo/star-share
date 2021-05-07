@@ -1,4 +1,5 @@
 import { InjectionToken } from '@angular/core';
+
 import { config } from '../config';
 
 export const SWARM_ADDRESSES = new InjectionToken<string[]>(

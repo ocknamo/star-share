@@ -13,6 +13,7 @@
         "plugin:@angular-eslint/ng-cli-compat--formatting-add-on",
         "plugin:@angular-eslint/template/process-inline-templates"
       ],
+      "plugins": ["simple-import-sort", "import"],
       "rules": {
         "@angular-eslint/component-selector": [
           "error",
@@ -29,7 +30,12 @@
             "prefix": "app",
             "style": "camelCase"
           }
-        ]
+        ],
+        "simple-import-sort/imports": "error",
+        "simple-import-sort/exports": "error",
+        "import/first": "error",
+        "import/newline-after-import": "error",
+        "import/no-duplicates": "error"
       }
     },
     {

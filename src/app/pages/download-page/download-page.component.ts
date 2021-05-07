@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NgIpfsService } from 'ng-ipfs-service';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+
 import { fileContentToDataUri } from './../../utils/convert';
 
 // constant
