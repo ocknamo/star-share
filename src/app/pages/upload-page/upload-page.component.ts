@@ -3,8 +3,16 @@ import { MatDialog } from '@angular/material/dialog';
 import { NgIpfsService } from 'ng-ipfs-service';
 import { Subject } from 'rxjs';
 import { filter, take, takeUntil } from 'rxjs/operators';
-import { MsgDialogComponent, MsgDialogData } from 'src/app/components';
+import { LocalStorageService } from 'src/app/common/local-storage.service';
+import {
+  MsgDialogComponent,
+  MsgDialogData,
+  MsgDialogResponseData,
+} from 'src/app/components';
 import { AppStore } from 'src/app/store/store';
+
+// Key for local storage.
+const dontShowDialogKeepOpenTab = 'DONT_SHOW_DIALOG_KEEP_OPEN_TAB';
 
 @Component({
   selector: 'app-upload-page',
@@ -32,7 +40,8 @@ export class UploadPageComponent implements OnInit, OnDestroy {
     private readonly el: ElementRef,
     private readonly ipfsService: NgIpfsService,
     private readonly appStore: AppStore,
-    private readonly dialog: MatDialog
+    private readonly dialog: MatDialog,
+    private readonly storage: LocalStorageService
   ) {}
 
   ngOnInit(): void {
@@ -94,12 +103,27 @@ export class UploadPageComponent implements OnInit, OnDestroy {
   }
 
   private openDialog() {
-    this.dialog.open<MsgDialogComponent, MsgDialogData>(MsgDialogComponent, {
-      data: {
-        title: 'Caution!',
-        msg: 'Please keep open this tab until the file downloaded.',
-      },
-    });
+    if (this.storage.get(dontShowDialogKeepOpenTab)) {
+      return;
+    }
+
+    this.dialog
+      .open<MsgDialogComponent, MsgDialogData, MsgDialogResponseData>(
+        MsgDialogComponent,
+        {
+          data: {
+            title: 'Caution!',
+            msg: 'Please keep open this tab until the file downloaded.',
+          },
+        }
+      )
+      .beforeClosed()
+      .subscribe((data) => {
+        this.storage.set({
+          key: dontShowDialogKeepOpenTab,
+          value: data.neverShowMeAgain,
+        });
+      });
   }
 
   private getDownloadUrl(cid: string) {
