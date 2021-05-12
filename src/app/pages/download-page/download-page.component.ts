@@ -1,15 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { IPFSEntry } from 'ipfs-core-types/src/files';
 import { NgIpfsService } from 'ng-ipfs-service';
 import { Subject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, takeUntil } from 'rxjs/operators';
+import { AppActions } from 'src/app/store/actions';
+import { AppStore } from 'src/app/store/store';
 
 import { fileContentToDataUri } from './../../utils/convert';
 
 // constant
 const CID_LENGTH = 46;
-const FETCH_TIMEOUT = 20000;
+const FETCH_TIMEOUT = 60000;
 const FILE_NAME_MAX_LENGTH = 50;
 
 interface DownloadFile {
@@ -22,7 +25,7 @@ interface DownloadFile {
   templateUrl: './download-page.component.html',
   styleUrls: ['./download-page.component.scss'],
 })
-export class DownloadPageComponent implements OnInit {
+export class DownloadPageComponent implements OnInit, OnDestroy {
   // For CID form.
   cidFormControl = new FormControl('', [
     Validators.required,
@@ -44,9 +47,17 @@ export class DownloadPageComponent implements OnInit {
     cid: '',
   };
 
+  // Error
+  isError = false;
+  errorMessage = '';
+
+  onDestroy$ = new Subject();
+
   constructor(
     private readonly ipfsService: NgIpfsService,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly appActions: AppActions,
+    private readonly appStore: AppStore,
   ) {}
 
   ngOnInit(): void {
@@ -66,6 +77,18 @@ export class DownloadPageComponent implements OnInit {
     });
 
     this.checkUrlQuery();
+
+    this.appStore.isNodeErrored
+    .asObservable()
+    .pipe(takeUntil(this.onDestroy$))
+    .subscribe((v) => {
+      this.isError = v.status;
+      this.errorMessage = v.message;
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.onDestroy$.next();
   }
 
   onDownloadButtonClick(): void {
@@ -84,18 +107,26 @@ export class DownloadPageComponent implements OnInit {
   }
 
   private async handleCID(cid: string): Promise<void> {
-    // @TODO: Error handring and messageing.
     const files = (await this.ipfsService.get()).get(cid, {
       timeout: FETCH_TIMEOUT,
     });
 
-    for await (const file of files) {
-      if (file.type !== 'file') {
-        throw new Error('This is not file.');
-      } else {
-        // This file.name is CID.
-        await this.prepareForDownload(file.content, file.name);
+    try {
+      // eslint-disable-next-line no-console
+      console.time('Search file');
+      for await (const file of files) {
+        if (file.type !== 'file') {
+          throw new Error('This is not file.');
+        } else {
+          // This file.name is CID.
+          await this.prepareForDownload(file.content, file.name);
+        }
       }
+    } catch (error) {
+      this.appActions.nodeErrored('I cannot find the file. Please wait for a while and try again.');
+    } finally {
+      // eslint-disable-next-line no-console
+      console.timeEnd('Search file');
     }
   }
 

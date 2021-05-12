@@ -12,8 +12,10 @@
         <mat-icon class="upload-icon">file_upload</mat-icon>
       </button>
     </div>
-    <div *ngIf="isError" class="item error-title">Error!</div>
-    <div *ngIf="isError" class="item error-message">{{ errorMessage }}</div>
+    <ng-container *ngIf="isError">
+      <div class="item error-title">Error!</div>
+      <div class="item error-message">{{ errorMessage }}</div>
+    </ng-container>
     <div class="item">{{ fileName }}</div>
     <div *ngIf="cid" class="item copy-parent">
       <div class="copy-value"><span class="key">CID: </span>{{ cid }}</div>
