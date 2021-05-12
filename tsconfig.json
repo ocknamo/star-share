@@ -21,7 +21,8 @@
     "allowSyntheticDefaultImports": true,
     "paths": {
       "stream": ["node_modules/stream-browserify"]
-    }
+    },
+    "resolveJsonModule": true
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

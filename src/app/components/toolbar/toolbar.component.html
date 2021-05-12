@@ -12,6 +12,9 @@
     <div class="item" role="agent version">
       Agent Version: {{ agentVersion }}
     </div>
+    <div class="item" role="application version">
+      App Version: {{ appVersion }}
+    </div>
   </div>
 
   <button
@@ -24,9 +27,12 @@
   </button>
   <mat-menu #menu="matMenu">
     <div class="menu-item description" role="description">IPFS node info</div>
-    <div class="menu-item" role="id">ID: {{ id }}</div>
-    <div class="menu-item" role="agent version">
+    <div class="menu-item id" role="id">ID: {{ id }}</div>
+    <div class="menu-item agent-version" role="agent version">
       Agent Version: {{ agentVersion }}
+    </div>
+    <div class="menu-item" role="application version">
+      Application Version: {{ appVersion }}
     </div>
   </mat-menu>
 </div>

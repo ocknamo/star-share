@@ -12,4 +12,6 @@ export class ToolbarComponent {
   id: string;
   @Input()
   agentVersion: string;
+  @Input()
+  appVersion: string;
 }

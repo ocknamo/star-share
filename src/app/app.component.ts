@@ -3,6 +3,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { IPFSConfig } from 'ipfs-core/src/components';
 import { NgIpfsService } from 'ng-ipfs-service';
 
+import { version } from '../../package.json';
 import { SWARM_ADDRESSES } from './providers/app-config';
 import { AppActions } from './store/actions';
 
@@ -15,6 +16,7 @@ export class AppComponent implements OnInit {
   title = '★ share';
   id = 'loading...';
   agentVersion = 'loading...';
+  appVersion = version;
 
   constructor(
     @Inject(NgIpfsService) private readonly ipfsService: NgIpfsService,
@@ -43,8 +45,10 @@ export class AppComponent implements OnInit {
       this.agentVersion = agentVersion;
       this.appActions.nodeStarted();
     } catch (error) {
+      this.id = 'error';
+      this.agentVersion = 'error';
       this.appActions.nodeErrored(
-        'IPFS Node could not be started. Please take some time and try again.'
+        'IPFS Node could not be started. Please wait for a while and try again.'
       );
     }
   }
