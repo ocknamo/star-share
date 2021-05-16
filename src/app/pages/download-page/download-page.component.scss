@@ -6,7 +6,7 @@
 }
 
 .label-text {
-  color: $thema-color;
+  color: $theme-color;
   border-bottom: solid black;
 }
 
@@ -29,8 +29,12 @@
   width: $button-size;
 }
 
+button:disabled {
+  opacity: 0.5;
+}
+
 .download-icon {
-  color: $thema-color;
+  color: $theme-color;
   line-height: $button-size;
   font-size: $button-size;
   height: $button-size;
@@ -40,4 +44,10 @@
 .contents .error-title {
   font-size: 1.5em;
   color: tomato;
+}
+
+a.clickable {
+  color: $theme-color;
+  cursor: pointer;
+  text-decoration: underline;
 }

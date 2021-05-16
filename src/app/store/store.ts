@@ -6,7 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class AppStore {
   // State of ipfs node.
-  readonly isNodePreperd = new BehaviorSubject<boolean>(false);
+  readonly isNodePrepared = new BehaviorSubject<boolean>(false);
   readonly isNodeErrored = new BehaviorSubject<{
     status: boolean;
     message: string;

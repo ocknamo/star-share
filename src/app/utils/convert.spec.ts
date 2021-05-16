@@ -1,8 +1,7 @@
 import {
-  binaryStringToDataUri,
   concatAsyncIterable,
-  fileContentToDataUri,
-  uint8ArrayToBinaryString,
+  fileContentToBlobUrl,
+  uint8ArrayToURL,
 } from './convert';
 
 describe('convert.ts', () => {
@@ -14,10 +13,11 @@ describe('convert.ts', () => {
     },
   };
 
-  describe('fileContentToDataUri', () => {
-    it('should convert filecontent to DataURI', async () => {
-      await expect(fileContentToDataUri(myAsyncIterable)).resolves.toBe(
-        'data:application/octet-stream;base64,AQIDBAUGBwgJ'
+  describe('fileContentToBlobUrl', () => {
+    global.URL.createObjectURL = jest.fn(() => 'bloburl');
+    it('should convert file content to BlobURL', async () => {
+      await expect(fileContentToBlobUrl(myAsyncIterable)).resolves.toBe(
+        'bloburl'
       );
     });
   });
@@ -30,17 +30,10 @@ describe('convert.ts', () => {
     });
   });
 
-  describe('uint8ArrayToBinaryString', () => {
-    it('should convert uint8Array to BinaryString', () => {
-      expect(uint8ArrayToBinaryString(Uint8Array.of(90, 91))).toBe('Z[');
-    });
-  });
-
-  describe('binaryStringToDataUri', () => {
-    it('should convert BinaryString to DataUri', () => {
-      expect(binaryStringToDataUri('Z[')).toBe(
-        'data:application/octet-stream;base64,Wls='
-      );
+  describe('uint8ArrayToURL', () => {
+    global.URL.createObjectURL = jest.fn(() => 'bloburl');
+    it('should convert uint8Array to Blob URL', () => {
+      expect(uint8ArrayToURL(Uint8Array.of(90, 91))).toBe('bloburl');
     });
   });
 });

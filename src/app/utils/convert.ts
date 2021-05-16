@@ -1,10 +1,11 @@
 import { concat } from 'uint8arrays';
 
-export const fileContentToDataUri = async (
+export const fileContentToBlobUrl = async (
   fileContent: AsyncIterable<Uint8Array>
 ): Promise<string> => {
   const all = await concatAsyncIterable(fileContent);
-  return binaryStringToDataUri(uint8ArrayToBinaryString(all));
+
+  return uint8ArrayToURL(all);
 };
 
 export const concatAsyncIterable = async (
@@ -18,8 +19,5 @@ export const concatAsyncIterable = async (
   return concat(content);
 };
 
-export const uint8ArrayToBinaryString = (u8: Uint8Array): string =>
-  Array.from(u8, (e) => String.fromCharCode(e)).join('');
-
-export const binaryStringToDataUri = (bs: string): string =>
-  'data:application/octet-stream;base64,' + btoa(bs);
+export const uint8ArrayToURL = (typedArray: Uint8Array): string =>
+  URL.createObjectURL(new Blob([typedArray.buffer]));

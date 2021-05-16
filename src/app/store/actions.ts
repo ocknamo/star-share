@@ -9,7 +9,7 @@ export class AppActions {
   constructor(private readonly appStore: AppStore) {}
   // Actions for ipfs
   nodeStarted(): void {
-    this.appStore.isNodePreperd.next(true);
+    this.appStore.isNodePrepared.next(true);
   }
 
   nodeErrored(message: string): void {

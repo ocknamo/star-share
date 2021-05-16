@@ -47,10 +47,16 @@
           class="download-button"
           aria-label="file upload icon-button"
           (click)="onDownloadButtonClick()"
+          [disabled]="downloaded"
         >
           <mat-icon class="download-icon">download</mat-icon>
         </button>
       </div>
+    </ng-container>
+    <ng-container *ngIf="downloaded">
+      <a class="clickable" (click)="onReDownloadButtonClick()"
+        >Download again</a
+      >
     </ng-container>
     <ng-container *ngIf="isError">
       <div class="item error-title">Error!</div>

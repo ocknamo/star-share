@@ -1,14 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { IPFSEntry } from 'ipfs-core-types/src/files';
+import { File } from 'ipfs-core-types/src/files';
 import { NgIpfsService } from 'ng-ipfs-service';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { AppActions } from 'src/app/store/actions';
 import { AppStore } from 'src/app/store/store';
 
-import { fileContentToDataUri } from './../../utils/convert';
+import { fileContentToBlobUrl } from './../../utils/convert';
 
 // constant
 const CID_LENGTH = 46;
@@ -16,7 +16,7 @@ const FETCH_TIMEOUT = 60000;
 const FILE_NAME_MAX_LENGTH = 50;
 
 interface DownloadFile {
-  dataUri: string;
+  fileContent: AsyncIterable<Uint8Array> | null;
   cid: string;
 }
 
@@ -43,7 +43,7 @@ export class DownloadPageComponent implements OnInit, OnDestroy {
   showDownloadButton = false;
 
   downloadFile: DownloadFile = {
-    dataUri: '',
+    fileContent: null,
     cid: '',
   };
 
@@ -51,16 +51,108 @@ export class DownloadPageComponent implements OnInit, OnDestroy {
   isError = false;
   errorMessage = '';
 
+  // After download flag
+  downloaded = false;
+
   onDestroy$ = new Subject();
 
   constructor(
     private readonly ipfsService: NgIpfsService,
     private readonly route: ActivatedRoute,
     private readonly appActions: AppActions,
-    private readonly appStore: AppStore,
+    private readonly appStore: AppStore
   ) {}
 
   ngOnInit(): void {
+    this.inputValueHandling();
+    this.checkUrlQuery();
+    this.nodeErrorHandling();
+  }
+
+  ngOnDestroy(): void {
+    this.onDestroy$.next();
+  }
+
+  async onDownloadButtonClick(): Promise<void> {
+    if (!this.downloadFile.cid) {
+      return;
+    }
+
+    // For debug.
+    console.time('Get file content');
+    await this.execDownload();
+    // For debug
+    console.timeEnd('Get file content');
+
+    // Downloaded
+    this.setDownloaded();
+  }
+
+  onReDownloadButtonClick(): void {
+    this.downloaded = false;
+    this.ngOnDestroy();
+    this.ngOnInit();
+  }
+
+  private async execDownload(): Promise<void> {
+    // Get inputted file name.
+    const fileName = this.fileNameFormControl.value;
+
+    const a = document.createElement('a');
+    document.body.appendChild(a);
+    a.setAttribute('style', 'display: none');
+
+    let url: string;
+    try {
+      url = await fileContentToBlobUrl(this.downloadFile.fileContent);
+    } catch (error) {
+      this.appActions.nodeErrored(
+        `Something is failed. Please try again or retry on more powerful machine.  message: ${error.message}`
+      );
+      throw new Error(error);
+    }
+    a.href = url;
+    a.download = fileName || this.downloadFile.cid;
+    a.click();
+
+    // For clear Memory.
+    URL.revokeObjectURL(url);
+  }
+
+  private async searchFileByCID(cid: string): Promise<File | void> {
+    try {
+      const files = (await this.ipfsService.get()).get(cid, {
+        timeout: FETCH_TIMEOUT,
+      });
+      // For debug
+      console.time('Search file');
+      for await (const file of files) {
+        if (file.type !== 'file') {
+          throw new Error('This is not file.');
+        } else {
+          return file;
+        }
+      }
+    } catch (error) {
+      this.appActions.nodeErrored(
+        'I cannot find the file. Please wait for a while and try again.'
+      );
+    } finally {
+      // For debug
+      console.timeEnd('Search file');
+    }
+  }
+
+  private async prepareForDownload(
+    fileContent: AsyncIterable<Uint8Array>,
+    cid: string
+  ): Promise<void> {
+    this.downloadFile = { fileContent, cid };
+    this.showDownloadButton = true;
+  }
+
+  private inputValueHandling(): void {
+    // Subscribe input value and check validation.
     this.cidFormControl.valueChanges.subscribe((v) => {
       this.clearDownloadFile();
       this.showDownloadButton = false;
@@ -70,91 +162,51 @@ export class DownloadPageComponent implements OnInit, OnDestroy {
       }
     });
 
+    // Subscribe valid input value and change loading flag.
     this.validValue$.pipe(debounceTime(300)).subscribe(async (v) => {
       this.loading = true;
-      await this.handleCID(v);
+      const file = await this.searchFileByCID(v);
       this.loading = false;
-    });
-
-    this.checkUrlQuery();
-
-    this.appStore.isNodeErrored
-    .asObservable()
-    .pipe(takeUntil(this.onDestroy$))
-    .subscribe((v) => {
-      this.isError = v.status;
-      this.errorMessage = v.message;
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.onDestroy$.next();
-  }
-
-  onDownloadButtonClick(): void {
-    if (!this.downloadFile.dataUri) {
-      return;
-    }
-    // Get inputed file name.
-    const fileName = this.fileNameFormControl.value;
-
-    const a = document.createElement('a');
-    document.body.appendChild(a);
-    a.setAttribute('style', 'display: none');
-    a.href = this.downloadFile.dataUri;
-    a.download = fileName || this.downloadFile.cid;
-    a.click();
-  }
-
-  private async handleCID(cid: string): Promise<void> {
-    const files = (await this.ipfsService.get()).get(cid, {
-      timeout: FETCH_TIMEOUT,
-    });
-
-    try {
-      // eslint-disable-next-line no-console
-      console.time('Search file');
-      for await (const file of files) {
-        if (file.type !== 'file') {
-          throw new Error('This is not file.');
-        } else {
-          // This file.name is CID.
-          await this.prepareForDownload(file.content, file.name);
-        }
+      // This file.name is CID.
+      if (file) {
+        await this.prepareForDownload(file.content, file.name);
       }
-    } catch (error) {
-      this.appActions.nodeErrored('I cannot find the file. Please wait for a while and try again.');
-    } finally {
-      // eslint-disable-next-line no-console
-      console.timeEnd('Search file');
-    }
+    });
   }
 
-  private async prepareForDownload(
-    fileContent: AsyncIterable<Uint8Array>,
-    cid: string
-  ): Promise<void> {
-    const uri = await fileContentToDataUri(fileContent);
-
-    this.downloadFile = { dataUri: uri, cid };
-    this.showDownloadButton = true;
+  private clearDownloadFile(): void {
+    this.downloadFile = { fileContent: null, cid: '' };
   }
 
-  private clearDownloadFile() {
-    this.downloadFile = { dataUri: '', cid: '' };
+  private nodeErrorHandling(): void {
+    this.appStore.isNodeErrored
+      .asObservable()
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe((v) => {
+        this.isError = v.status;
+        this.errorMessage = v.message;
+      });
   }
 
-  private checkUrlQuery() {
+  private checkUrlQuery(): void {
     const params = this.route.snapshot.queryParams;
 
+    // Check CID param.
     const hasCid = params.CID !== undefined;
     if (hasCid) {
       this.cidFormControl.setValue(params.CID, { emitEvent: true });
     }
 
-    const hasfileName = params.fileName !== undefined;
-    if (hasfileName) {
+    // Check fileName param.
+    const hasFileName = params.fileName !== undefined;
+    if (hasFileName) {
       this.fileNameFormControl.setValue(params.fileName);
     }
+  }
+
+  // Set downloaded state
+  private setDownloaded(): void {
+    this.clearDownloadFile();
+    this.downloaded = true;
   }
 }

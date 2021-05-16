@@ -1,7 +1,7 @@
 <h1 mat-dialog-title>{{ data.title }}</h1>
 <div mat-dialog-content>{{ data.msg }}</div>
 <div class="checkbox">
-  <mat-checkbox [(ngModel)]="neverShowMeAgain"
+  <mat-checkbox ([ngModel])="(neverShowMeAgain)"
     >Never show me again.</mat-checkbox
   >
 </div>

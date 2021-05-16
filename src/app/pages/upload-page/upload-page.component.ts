@@ -10,6 +10,7 @@ import {
   MsgDialogResponseData,
 } from 'src/app/components';
 import { AppStore } from 'src/app/store/store';
+import { getDownloadUrl } from 'src/app/utils/get-download-url';
 
 // Key for local storage.
 const dontShowDialogKeepOpenTab = 'DONT_SHOW_DIALOG_KEEP_OPEN_TAB';
@@ -25,7 +26,7 @@ export class UploadPageComponent implements OnInit, OnDestroy {
   fileName: string | null = null;
   cid: string | null = null;
   downloadUrl: string | null = null;
-  isNodePreperd = false;
+  isNodePrepared = false;
 
   // Error
   isError = false;
@@ -45,21 +46,7 @@ export class UploadPageComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.appStore.isNodePreperd
-      .pipe(
-        filter((v) => v),
-        take(1),
-        takeUntil(this.onDestroy$)
-      )
-      .subscribe((v) => (this.isNodePreperd = v));
-
-    this.appStore.isNodeErrored
-      .asObservable()
-      .pipe(takeUntil(this.onDestroy$))
-      .subscribe((v) => {
-        this.isError = v.status;
-        this.errorMessage = v.message;
-      });
+    this.nodeErrorHandling();
   }
 
   ngOnDestroy(): void {
@@ -67,14 +54,7 @@ export class UploadPageComponent implements OnInit, OnDestroy {
   }
 
   onUploadButtonClick(): void {
-    // Initialize input.
-    if (this.input) {
-      this.input.value = '';
-    }
-    this.fileName = null;
-    this.cid = null;
-    this.downloadUrl = null;
-
+    this.clearInput();
     this.input = this.el.nativeElement.querySelector('#file');
     this.input.click();
   }
@@ -86,11 +66,12 @@ export class UploadPageComponent implements OnInit, OnDestroy {
     const ipfs = await this.ipfsService.get();
 
     // add API
-    // Upload file
+    // Upload file and pin.
     const status = await ipfs.add(this.file, { pin: true });
 
     this.cid = String(status.cid);
-    this.downloadUrl = this.getDownloadUrl(this.cid);
+    const baseUrl = window.location.origin;
+    this.downloadUrl = getDownloadUrl(baseUrl, this.cid, this.fileName);
   }
 
   downloadUrlCopyButtonClick(): void {
@@ -102,7 +83,17 @@ export class UploadPageComponent implements OnInit, OnDestroy {
     this.handleCopyTip$.next('CID');
   }
 
-  private openDialog() {
+  private clearInput(): void {
+    // clear input.
+    if (this.input) {
+      this.input.value = '';
+    }
+    this.fileName = null;
+    this.cid = null;
+    this.downloadUrl = null;
+  }
+
+  private openDialog(): void {
     if (this.storage.get(dontShowDialogKeepOpenTab)) {
       return;
     }
@@ -126,9 +117,21 @@ export class UploadPageComponent implements OnInit, OnDestroy {
       });
   }
 
-  private getDownloadUrl(cid: string) {
-    const baseUrl = window.location.origin;
+  private nodeErrorHandling(): void {
+    this.appStore.isNodePrepared
+      .pipe(
+        filter((v) => v),
+        take(1),
+        takeUntil(this.onDestroy$)
+      )
+      .subscribe((v) => (this.isNodePrepared = v));
 
-    return `${baseUrl}/#/download?CID=${this.cid}&fileName=${this.fileName}`;
+    this.appStore.isNodeErrored
+      .asObservable()
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe((v) => {
+        this.isError = v.status;
+        this.errorMessage = v.message;
+      });
   }
 }
