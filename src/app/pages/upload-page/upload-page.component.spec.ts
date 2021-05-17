@@ -20,9 +20,9 @@ describe('UploadPageComponent', () => {
         {
           provide: NgIpfsService,
           useValue: {
-            start: () => {},
-            get: () => ({
-              id: () => ({ id: 'id', agentVersion: 'agentVersion' }),
+            start: (): void => {},
+            get: (): unknown => ({
+              id: (): unknown => ({ id: 'id', agentVersion: 'agentVersion' }),
             }),
           },
         },

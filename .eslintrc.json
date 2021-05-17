@@ -4,6 +4,7 @@
   "overrides": [
     {
       "files": ["*.ts"],
+      "parser": "@typescript-eslint/parser",
       "parserOptions": {
         "project": ["tsconfig.json", "e2e/tsconfig.json"],
         "createDefaultProgram": true
@@ -13,7 +14,12 @@
         "plugin:@angular-eslint/ng-cli-compat--formatting-add-on",
         "plugin:@angular-eslint/template/process-inline-templates"
       ],
-      "plugins": ["simple-import-sort", "import"],
+      "plugins": [
+        "@typescript-eslint",
+        "simple-import-sort",
+        "import",
+        "unused-imports"
+      ],
       "rules": {
         "@angular-eslint/component-selector": [
           "error",
@@ -35,13 +41,18 @@
         "simple-import-sort/exports": "error",
         "import/first": "error",
         "import/newline-after-import": "error",
-        "import/no-duplicates": "error"
+        "import/no-duplicates": "error",
+        "@typescript-eslint/explicit-function-return-type": "error",
+        "no-unused-vars": "off",
+        "unused-imports/no-unused-imports": "error"
       }
     },
     {
       "files": ["*.html"],
       "extends": ["plugin:@angular-eslint/template/recommended"],
-      "rules": {}
+      "rules": {
+        "@angular-eslint/template/banana-in-box": "off"
+      }
     }
   ]
 }

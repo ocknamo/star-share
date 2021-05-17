@@ -79,9 +79,11 @@ export class DownloadPageComponent implements OnInit, OnDestroy {
     }
 
     // For debug.
+    // eslint-disable-next-line no-console
     console.time('Get file content');
     await this.execDownload();
     // For debug
+    // eslint-disable-next-line no-console
     console.timeEnd('Get file content');
 
     // Downloaded
@@ -125,6 +127,7 @@ export class DownloadPageComponent implements OnInit, OnDestroy {
         timeout: FETCH_TIMEOUT,
       });
       // For debug
+      // eslint-disable-next-line no-console
       console.time('Search file');
       for await (const file of files) {
         if (file.type !== 'file') {
@@ -139,6 +142,7 @@ export class DownloadPageComponent implements OnInit, OnDestroy {
       );
     } finally {
       // For debug
+      // eslint-disable-next-line no-console
       console.timeEnd('Search file');
     }
   }

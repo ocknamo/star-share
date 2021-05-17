@@ -5,7 +5,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { NgIpfsService } from 'ng-ipfs-service';
 
 import { AppComponent } from './app.component';
-import { AppModule } from './app.module';
 import { ToolbarComponent } from './components';
 import { UploadPageComponent } from './pages';
 import { MockElementRef } from './test/mock';
@@ -21,9 +20,9 @@ describe('AppComponent', () => {
         {
           provide: NgIpfsService,
           useValue: {
-            start: () => {},
-            get: () => ({
-              id: () => ({ id: 'id', agentVersion: 'agentVersion' }),
+            start: (): void => {},
+            get: (): unknown => ({
+              id: (): unknown => ({ id: 'id', agentVersion: 'agentVersion' }),
             }),
           },
         },

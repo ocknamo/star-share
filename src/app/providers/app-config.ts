@@ -6,6 +6,6 @@ export const SWARM_ADDRESSES = new InjectionToken<string[]>(
   'ipfsSwarmAddresses',
   {
     providedIn: 'root',
-    factory: () => config.prod.ipfs.swarmAddresses,
+    factory: (): string[] => config.prod.ipfs.swarmAddresses,
   }
 );
