@@ -7,6 +7,7 @@ import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { AppActions } from 'src/app/store/actions';
 import { AppStore } from 'src/app/store/store';
+import { isOver2gb } from 'src/app/utils/file-size-validation';
 
 import { fileContentToBlobUrl } from './../../utils/convert';
 
@@ -168,13 +169,27 @@ export class DownloadPageComponent implements OnInit, OnDestroy {
 
     // Subscribe valid input value and change loading flag.
     this.validValue$.pipe(debounceTime(300)).subscribe(async (v) => {
+      if (!this.appStore.isNodeErred.getValue().status) {
+        this.clearError();
+      }
       this.loading = true;
       const file = await this.searchFileByCID(v);
       this.loading = false;
-      // This file.name is CID.
-      if (file) {
-        await this.prepareForDownload(file.content, file.name);
+
+      if (!file) {
+        return;
       }
+
+      if (isOver2gb(file)) {
+        this.setError(
+          true,
+          'This file is too large to download. Please do not download file over 2GB.'
+        );
+        return;
+      }
+
+      // This file.name is CID.
+      await this.prepareForDownload(file.content, file.name);
     });
   }
 
@@ -187,8 +202,7 @@ export class DownloadPageComponent implements OnInit, OnDestroy {
       .asObservable()
       .pipe(takeUntil(this.onDestroy$))
       .subscribe((v) => {
-        this.isError = v.status;
-        this.errorMessage = v.message;
+        this.setError(v.status, v.message);
       });
   }
 
@@ -212,5 +226,15 @@ export class DownloadPageComponent implements OnInit, OnDestroy {
   private setDownloaded(): void {
     this.clearDownloadFile();
     this.downloaded = true;
+  }
+
+  private setError(isError: boolean, message: string): void {
+    this.isError = isError;
+    this.errorMessage = message;
+  }
+
+  private clearError(): void {
+    this.isError = false;
+    this.errorMessage = '';
   }
 }
