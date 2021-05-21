@@ -10,6 +10,8 @@ import {
   MsgDialogResponseData,
 } from 'src/app/components';
 import { AppStore } from 'src/app/store/store';
+import { biteToGb, floorToDigits } from 'src/app/utils/calc-utils';
+import { isOver2gb } from 'src/app/utils/file-size-validation';
 import { getDownloadUrl } from 'src/app/utils/get-download-url';
 
 // Key for local storage.
@@ -55,12 +57,27 @@ export class UploadPageComponent implements OnInit, OnDestroy {
 
   onUploadButtonClick(): void {
     this.clearInput();
+    this.clearError();
     this.input = this.el.nativeElement.querySelector('#file');
     this.input.click();
   }
 
   async processFile(input: any): Promise<void> {
     this.file = input.files[0];
+
+    if (isOver2gb(this.file)) {
+      this.clearInput();
+      this.setError(
+        true,
+        `Too big to upload. Please do not upload file over 2GB. This size: ${floorToDigits(
+          biteToGb(this.file.size),
+          2
+        )} GB`
+      );
+
+      return;
+    }
+
     this.fileName = this.file.name;
 
     const ipfs = await this.ipfsService.get();
@@ -91,6 +108,16 @@ export class UploadPageComponent implements OnInit, OnDestroy {
     this.fileName = null;
     this.cid = null;
     this.downloadUrl = null;
+  }
+
+  private setError(isError: boolean, message: string): void {
+    this.isError = isError;
+    this.errorMessage = message;
+  }
+
+  private clearError(): void {
+    this.isError = false;
+    this.errorMessage = '';
   }
 
   private openDialog(): void {
@@ -126,12 +153,11 @@ export class UploadPageComponent implements OnInit, OnDestroy {
       )
       .subscribe((v) => (this.isNodePrepared = v));
 
-    this.appStore.isNodeErrored
+    this.appStore.isNodeErred
       .asObservable()
       .pipe(takeUntil(this.onDestroy$))
       .subscribe((v) => {
-        this.isError = v.status;
-        this.errorMessage = v.message;
+        this.setError(v.status, v.message);
       });
   }
 }

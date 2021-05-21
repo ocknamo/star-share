@@ -183,7 +183,7 @@ export class DownloadPageComponent implements OnInit, OnDestroy {
   }
 
   private nodeErrorHandling(): void {
-    this.appStore.isNodeErrored
+    this.appStore.isNodeErred
       .asObservable()
       .pipe(takeUntil(this.onDestroy$))
       .subscribe((v) => {
