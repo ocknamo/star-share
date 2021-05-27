@@ -37,6 +37,9 @@ export class UploadPageComponent implements OnInit, OnDestroy {
   // For handle copy tip
   handleCopyTip$ = new Subject<'CID' | 'DOWNLOAD_URL'>();
 
+  // Show spinner when uploading file.
+  loading = false;
+
   onDestroy$ = new Subject();
 
   constructor(
@@ -82,6 +85,9 @@ export class UploadPageComponent implements OnInit, OnDestroy {
 
     const ipfs = await this.ipfsService.get();
 
+    // Show loading spinner
+    this.loading = true;
+
     // add API
     // Upload file and pin.
     const status = await ipfs.add(this.file, { pin: true });
@@ -89,6 +95,9 @@ export class UploadPageComponent implements OnInit, OnDestroy {
     this.cid = String(status.cid);
     const baseUrl = window.location.origin;
     this.downloadUrl = getDownloadUrl(baseUrl, this.cid, this.fileName);
+
+    // Hide loading spinner
+    this.loading = false;
   }
 
   downloadUrlCopyButtonClick(): void {

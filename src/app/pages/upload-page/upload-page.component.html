@@ -55,6 +55,9 @@
         </button>
       </div>
     </div>
+    <ng-container *ngIf="loading">
+      <div class="item"><mat-spinner [diameter]="20"></mat-spinner></div>
+    </ng-container>
   </div>
 </div>
 
