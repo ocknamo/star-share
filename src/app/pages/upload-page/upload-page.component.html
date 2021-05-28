@@ -1,6 +1,8 @@
 <div class="page-wrapper">
   <div class="contents">
     <div class="message item" role="message">Upload file!</div>
+
+    <!-- Upload button -->
     <div class="item">
       <button
         mat-icon-button
@@ -12,11 +14,17 @@
         <mat-icon class="upload-icon">file_upload</mat-icon>
       </button>
     </div>
+
+    <!-- Error message -->
     <ng-container *ngIf="isError">
       <div class="item error-title">Error!</div>
       <div class="item error-message">{{ errorMessage }}</div>
     </ng-container>
+
+    <!-- File name -->
     <div class="item">{{ fileName }}</div>
+
+    <!-- CID -->
     <div *ngIf="cid" class="item copy-parent">
       <div class="copy-value"><span class="key">CID: </span>{{ cid }}</div>
       <div>
@@ -35,6 +43,8 @@
         </button>
       </div>
     </div>
+
+    <!-- Download Url -->
     <div *ngIf="downloadUrl" class="item copy-parent">
       <div class="copy-value">
         <span class="key">Download URL: </span>{{ downloadUrl }}
@@ -55,6 +65,8 @@
         </button>
       </div>
     </div>
+
+    <!-- Show loading spinner -->
     <ng-container *ngIf="loading">
       <div class="item"><mat-spinner [diameter]="20"></mat-spinner></div>
     </ng-container>

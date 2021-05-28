@@ -7,7 +7,7 @@ import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { AppActions } from 'src/app/store/actions';
 import { AppStore } from 'src/app/store/store';
-import { isOver2gb } from 'src/app/utils/file-size-validation';
+import { isOver100mb, isOver2gb } from 'src/app/utils/file-size-validation';
 
 import { fileContentToBlobUrl } from './../../utils/convert';
 
@@ -79,13 +79,13 @@ export class DownloadPageComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // For debug.
-    // eslint-disable-next-line no-console
-    console.time('Get file content');
+    // Show loading spinner
+    this.loading = true;
+
     await this.execDownload();
-    // For debug
-    // eslint-disable-next-line no-console
-    console.timeEnd('Get file content');
+
+    // Hide loading spinner
+    this.loading = false;
 
     // Downloaded
     this.setDownloaded();
@@ -127,9 +127,7 @@ export class DownloadPageComponent implements OnInit, OnDestroy {
       const files = (await this.ipfsService.get()).get(cid, {
         timeout: FETCH_TIMEOUT,
       });
-      // For debug
-      // eslint-disable-next-line no-console
-      console.time('Search file');
+
       for await (const file of files) {
         if (file.type !== 'file') {
           throw new Error('This is not file.');
@@ -141,10 +139,6 @@ export class DownloadPageComponent implements OnInit, OnDestroy {
       this.appActions.nodeErrored(
         'I cannot find the file. Please wait for a while and try again.'
       );
-    } finally {
-      // For debug
-      // eslint-disable-next-line no-console
-      console.timeEnd('Search file');
     }
   }
 
@@ -186,6 +180,10 @@ export class DownloadPageComponent implements OnInit, OnDestroy {
           'This file is too large to download. Please do not download file over 2GB.'
         );
         return;
+      }
+
+      if (isOver100mb(file)) {
+        // Open modal here.
       }
 
       // This file.name is CID.

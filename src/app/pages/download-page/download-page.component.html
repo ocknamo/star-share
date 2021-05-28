@@ -1,6 +1,8 @@
 <div class="page-wrapper">
   <div class="contents">
     <div class="message item" role="message">Download file!</div>
+
+    <!-- Input forms -->
     <div class="item">
       <form class="form">
         <mat-form-field appearance="outline" class="full-width">
@@ -37,9 +39,8 @@
         </mat-form-field>
       </form>
     </div>
-    <ng-container *ngIf="loading">
-      <div class="item"><mat-spinner [diameter]="20"></mat-spinner></div>
-    </ng-container>
+
+    <!-- Download button -->
     <ng-container *ngIf="showDownloadButton">
       <div class="item">
         <button
@@ -47,20 +48,29 @@
           class="download-button"
           aria-label="file upload icon-button"
           (click)="onDownloadButtonClick()"
-          [disabled]="downloaded"
+          [disabled]="downloaded || loading"
         >
           <mat-icon class="download-icon">download</mat-icon>
         </button>
       </div>
     </ng-container>
+
+    <!-- Download again link -->
     <ng-container *ngIf="downloaded">
       <a class="clickable" (click)="onReDownloadButtonClick()"
         >Download again</a
       >
     </ng-container>
+
+    <!-- Show Error message -->
     <ng-container *ngIf="isError">
       <div class="item error-title">Error!</div>
       <div class="item error-message">{{ errorMessage }}</div>
+    </ng-container>
+
+    <!-- Show loading spinner -->
+    <ng-container *ngIf="loading">
+      <div class="item"><mat-spinner [diameter]="20"></mat-spinner></div>
     </ng-container>
   </div>
 </div>
