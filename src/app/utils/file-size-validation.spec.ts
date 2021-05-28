@@ -1,4 +1,8 @@
-import { isOver2gb, lessThanOrEqualToXSize } from './file-size-validation';
+import {
+  isOver2gb,
+  isOver100mb,
+  lessThanOrEqualToXSize,
+} from './file-size-validation';
 
 describe('file-size-validation', () => {
   describe('lessThanOrEqualToXSize', () => {
@@ -37,6 +41,27 @@ describe('file-size-validation', () => {
       expect(isOver2gb(file1)).toBe(false);
       const file2 = { size: 1999999999 } as File;
       expect(isOver2gb(file2)).toBe(false);
+    });
+  });
+
+  describe('isOver100mb', () => {
+    it('should be true if file size is over than 100MB.', () => {
+      const file1 = { size: 100000001 } as File;
+      expect(isOver100mb(file1)).toBe(true);
+      const file2 = { size: 999999999 } as File;
+      expect(isOver100mb(file2)).toBe(true);
+    });
+
+    it('should be false if file size is equal to 100MB.', () => {
+      const file1 = { size: 100000000 } as File;
+      expect(isOver100mb(file1)).toBe(false);
+    });
+
+    it('should be false if file size is not over than 100MB', () => {
+      const file1 = { size: 1 } as File;
+      expect(isOver100mb(file1)).toBe(false);
+      const file2 = { size: 99999999 } as File;
+      expect(isOver100mb(file2)).toBe(false);
     });
   });
 });

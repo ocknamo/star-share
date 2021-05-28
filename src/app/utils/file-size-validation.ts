@@ -1,6 +1,6 @@
 import { File as IPFSFile } from 'ipfs-core-types/src/files';
 
-import { gb } from '../common/constants';
+import { gb, mb } from '../common/constants';
 
 export const lessThanOrEqualToXSize = (
   file: File | IPFSFile,
@@ -15,3 +15,6 @@ export const lessThanOrEqualToXSize = (
 
 export const isOver2gb = (file: File | IPFSFile): boolean =>
   !lessThanOrEqualToXSize(file, 2 * gb);
+
+export const isOver100mb = (file: File | IPFSFile): boolean =>
+  !lessThanOrEqualToXSize(file, 100 * mb);

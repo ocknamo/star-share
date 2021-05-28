@@ -1,5 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogModule } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { NgIpfsService } from 'ng-ipfs-service';
 
@@ -26,6 +27,7 @@ describe('DownloadPageComponent', () => {
           useValue: { snapshot: { queryParams: {} } },
         },
       ],
+      imports: [MatDialogModule],
       declarations: [DownloadPageComponent],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

@@ -1,0 +1,9 @@
+<h1 mat-dialog-title>{{ data.title }}</h1>
+<div mat-dialog-content>{{ data.msg }}</div>
+<div mat-dialog-content>Are you OK?</div>
+<div class="button-parents" mat-dialog-actions>
+  <button mat-button color="primary" (click)="onClickOkButton()">OK</button>
+  <button mat-button color="warn" (click)="onClickNoButton()">
+    No. Stop download!
+  </button>
+</div>

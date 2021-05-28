@@ -1,13 +1,20 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { File } from 'ipfs-core-types/src/files';
 import { NgIpfsService } from 'ng-ipfs-service';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
+import {
+  DownloadCautionDialogComponent,
+  DownloadCautionDialogData,
+  DownloadCautionDialogResponseData,
+} from 'src/app/components';
 import { AppActions } from 'src/app/store/actions';
 import { AppStore } from 'src/app/store/store';
-import { isOver100mb, isOver2gb } from 'src/app/utils/file-size-validation';
+import { biteToGb, floorToDigits } from 'src/app/utils/calc-utils';
+import { isOver2gb, isOver100mb } from 'src/app/utils/file-size-validation';
 
 import { fileContentToBlobUrl } from './../../utils/convert';
 
@@ -22,7 +29,6 @@ interface DownloadFile {
 }
 
 @Component({
-  selector: 'app-download-page',
   templateUrl: './download-page.component.html',
   styleUrls: ['./download-page.component.scss'],
 })
@@ -61,7 +67,8 @@ export class DownloadPageComponent implements OnInit, OnDestroy {
     private readonly ipfsService: NgIpfsService,
     private readonly route: ActivatedRoute,
     private readonly appActions: AppActions,
-    private readonly appStore: AppStore
+    private readonly appStore: AppStore,
+    private readonly dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -183,11 +190,33 @@ export class DownloadPageComponent implements OnInit, OnDestroy {
       }
 
       if (isOver100mb(file)) {
-        // Open modal here.
+        this.dialog
+          .open<
+            DownloadCautionDialogComponent,
+            DownloadCautionDialogData,
+            DownloadCautionDialogResponseData
+          >(DownloadCautionDialogComponent, {
+            data: {
+              title: 'Caution!',
+              msg: `The file size is probably too large. It is ${floorToDigits(
+                biteToGb(file.size),
+                2
+              )} GB.`,
+            },
+            disableClose: true,
+          })
+          .beforeClosed()
+          .subscribe(async (data) => {
+            if (!data.result) {
+              this.clearInputs();
+              return;
+            }
+            await this.prepareForDownload(file.content, file.name);
+          });
+      } else {
+        // This file.name is CID.
+        await this.prepareForDownload(file.content, file.name);
       }
-
-      // This file.name is CID.
-      await this.prepareForDownload(file.content, file.name);
     });
   }
 
@@ -234,5 +263,10 @@ export class DownloadPageComponent implements OnInit, OnDestroy {
   private clearError(): void {
     this.isError = false;
     this.errorMessage = '';
+  }
+
+  private clearInputs(): void {
+    this.cidFormControl.reset();
+    this.fileNameFormControl.reset();
   }
 }

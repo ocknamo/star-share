@@ -15,6 +15,7 @@ import { NgIpfsModule } from 'ng-ipfs-service';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import {
+  DownloadCautionDialogComponent,
   MsgDialogComponent,
   MsgTipComponent,
   ToolbarComponent,
@@ -34,6 +35,7 @@ import {
     PageNotFoundComponent,
     MsgDialogComponent,
     MsgTipComponent,
+    DownloadCautionDialogComponent,
   ],
   imports: [
     BrowserModule,
