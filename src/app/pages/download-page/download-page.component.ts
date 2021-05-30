@@ -6,7 +6,11 @@ import { File } from 'ipfs-core-types/src/files';
 import { NgIpfsService } from 'ng-ipfs-service';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { CID_LENGTH, FETCH_TIMEOUT, FILE_NAME_MAX_LENGTH } from 'src/app/common/constants';
+import {
+  CID_LENGTH,
+  FETCH_TIMEOUT,
+  FILE_NAME_MAX_LENGTH,
+} from 'src/app/common/constants';
 import {
   DownloadCautionDialogComponent,
   DownloadCautionDialogData,
@@ -98,6 +102,7 @@ export class DownloadPageComponent implements OnInit, OnDestroy {
     this.downloaded = false;
     this.ngOnDestroy();
     this.ngOnInit();
+    this.emitCidInputChange();
   }
 
   private async execDownload(): Promise<void> {
@@ -265,5 +270,11 @@ export class DownloadPageComponent implements OnInit, OnDestroy {
   private clearInputs(): void {
     this.cidFormControl.reset();
     this.fileNameFormControl.reset();
+  }
+
+  private emitCidInputChange(): void {
+    this.cidFormControl.setValue(this.cidFormControl.value, {
+      emitEvent: true,
+    });
   }
 }
