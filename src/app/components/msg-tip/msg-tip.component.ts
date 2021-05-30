@@ -1,5 +1,5 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-msg-tip',
@@ -10,17 +10,13 @@ import { Component, Input, OnInit } from '@angular/core';
       transition(':enter', [
         style({ opacity: 0 }),
         animate('100ms', style({ opacity: 1 })),
-        animate('1000ms', style({ opacity: 1 })),
+        animate('2000ms', style({ opacity: 1 })),
         animate('200ms', style({ opacity: 0 })),
       ]),
     ]),
   ],
 })
-export class MsgTipComponent implements OnInit {
+export class MsgTipComponent {
   @Input()
   message = 'copied';
-
-  constructor() {}
-
-  ngOnInit(): void {}
 }
