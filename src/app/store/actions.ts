@@ -12,12 +12,7 @@ export class AppActions {
     this.appStore.isNodePrepared.next(true);
   }
 
-  nodeErrored(message: string): void {
+  nodeErred(message: string): void {
     this.appStore.isNodeErred.next({ status: true, message });
   }
-
-  // // Actions for file upload.
-  // uploadErrored(message: string): void {
-
-  // }
 }

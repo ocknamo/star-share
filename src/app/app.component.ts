@@ -47,7 +47,7 @@ export class AppComponent implements OnInit {
     } catch (error) {
       this.id = 'error';
       this.agentVersion = 'error';
-      this.appActions.nodeErrored(
+      this.appActions.nodeErred(
         'IPFS Node could not be started. Please wait for a while and try again.'
       );
     }

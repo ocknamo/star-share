@@ -6,6 +6,7 @@ import { File } from 'ipfs-core-types/src/files';
 import { NgIpfsService } from 'ng-ipfs-service';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
+import { CID_LENGTH, FETCH_TIMEOUT, FILE_NAME_MAX_LENGTH } from 'src/app/common/constants';
 import {
   DownloadCautionDialogComponent,
   DownloadCautionDialogData,
@@ -17,11 +18,6 @@ import { biteToGb, floorToDigits } from 'src/app/utils/calc-utils';
 import { isOver2gb, isOver100mb } from 'src/app/utils/file-size-validation';
 
 import { fileContentToBlobUrl } from './../../utils/convert';
-
-// constant
-const CID_LENGTH = 46;
-const FETCH_TIMEOUT = 60000;
-const FILE_NAME_MAX_LENGTH = 50;
 
 interface DownloadFile {
   fileContent: AsyncIterable<Uint8Array> | null;
@@ -116,11 +112,12 @@ export class DownloadPageComponent implements OnInit, OnDestroy {
     try {
       url = await fileContentToBlobUrl(this.downloadFile.fileContent);
     } catch (error) {
-      this.appActions.nodeErrored(
+      this.appActions.nodeErred(
         `Something is failed. Please try again or retry on more powerful machine.  message: ${error.message}`
       );
       throw new Error(error);
     }
+
     a.href = url;
     a.download = fileName || this.downloadFile.cid;
     a.click();
@@ -143,16 +140,16 @@ export class DownloadPageComponent implements OnInit, OnDestroy {
         }
       }
     } catch (error) {
-      this.appActions.nodeErrored(
+      this.appActions.nodeErred(
         'I cannot find the file. Please wait for a while and try again.'
       );
     }
   }
 
-  private async prepareForDownload(
+  private prepareForDownload(
     fileContent: AsyncIterable<Uint8Array>,
     cid: string
-  ): Promise<void> {
+  ): void {
     this.downloadFile = { fileContent, cid };
     this.showDownloadButton = true;
   }
@@ -211,11 +208,11 @@ export class DownloadPageComponent implements OnInit, OnDestroy {
               this.clearInputs();
               return;
             }
-            await this.prepareForDownload(file.content, file.name);
+            this.prepareForDownload(file.content, file.name);
           });
       } else {
         // This file.name is CID.
-        await this.prepareForDownload(file.content, file.name);
+        this.prepareForDownload(file.content, file.name);
       }
     });
   }
