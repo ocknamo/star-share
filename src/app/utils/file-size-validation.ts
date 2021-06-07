@@ -1,4 +1,4 @@
-import { File as IPFSFile } from 'ipfs-core-types/src/files';
+import { File as IPFSFile } from 'ipfs-core-types/src/root';
 
 import { gb, mb } from '../common/constants';
 

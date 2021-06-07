@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Component, Inject, OnInit } from '@angular/core';
-import { IPFSConfig } from 'ipfs-core/src/components';
+import {  Config as IPFSConfig  } from 'ipfs-core-types/src/config';
 import { NgIpfsService } from 'ng-ipfs-service';
 
 import { version } from '../../package.json';
@@ -25,7 +25,7 @@ export class AppComponent implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
-    // Initialise IPFS node.
+    // Initialize IPFS node.
     const ipfsConfig: IPFSConfig = {
       Addresses: {
         Swarm: this.swarmAddresses,
