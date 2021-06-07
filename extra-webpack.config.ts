@@ -1,5 +1,5 @@
-import { Configuration, ProvidePlugin } from 'webpack';
 import NodePolyfillPlugin from 'node-polyfill-webpack-plugin';
+import { Configuration, ProvidePlugin } from 'webpack';
 
 export default {
   plugins: [

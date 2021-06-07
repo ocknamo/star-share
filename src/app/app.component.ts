@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Component, Inject, OnInit } from '@angular/core';
-import {  Config as IPFSConfig  } from 'ipfs-core-types/src/config';
+import { Config as IPFSConfig } from 'ipfs-core-types/src/config';
 import { NgIpfsService } from 'ng-ipfs-service';
 
 import { version } from '../../package.json';
