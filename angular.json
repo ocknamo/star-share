@@ -24,7 +24,7 @@
               "path": "./extra-webpack.config.ts",
               "replaceDuplicatePlugins": true
             },
-            "outputPath": "dist",
+            "outputPath": "dist/star-share",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",

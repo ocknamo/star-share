@@ -15,7 +15,7 @@
     "ci:format-and-lint": "yarn lint && yarn format && git diff --exit-code",
     "ci:deploy": "yarn ci:format-and-lint && yarn ci:test && yarn ci:build && yarn deploy",
     "bundle-status": "webpack-bundle-analyzer dist/star-share/stats.json",
-    "deploy": "yarn s3-deploy './dist/**' --cwd './dist/' --bucket starshare.ipfscrosspoint.net --gzip html,js,css,json,ico,txt --deleteRemoved"
+    "deploy": "yarn s3-deploy './dist/star-share/**' --cwd './dist/star-share/' --bucket starshare.ipfscrosspoint.net --gzip html,js,css,json,ico,txt --deleteRemoved"
   },
   "private": true,
   "dependencies": {
