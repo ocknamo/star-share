@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { File } from 'ipfs-core-types/src/root';
+import { IPFSEntry } from 'ipfs-core-types/src/root';
 import { NgIpfsService } from 'ng-ipfs-service';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
@@ -131,19 +131,30 @@ export class DownloadPageComponent implements OnInit, OnDestroy {
     URL.revokeObjectURL(url);
   }
 
-  private async searchFileByCID(cid: string): Promise<File | void> {
+  private async searchFileByCID(
+    cid: string
+  ): Promise<{ content: AsyncIterable<Uint8Array>; meta: IPFSEntry } | void> {
     try {
-      const files = (await this.ipfsService.get()).get(cid, {
+      const ipfsNode = await this.ipfsService.get();
+
+      // Fetch file meta data.
+      const fileMetas = ipfsNode.ls(cid, { timeout: FETCH_TIMEOUT });
+      let fileMeta: IPFSEntry;
+
+      for await (const meta of fileMetas) {
+        if (meta.type !== 'file') {
+          throw new Error('This is not file.');
+        } else {
+          fileMeta = meta;
+        }
+      }
+
+      // Get content.
+      const content = ipfsNode.cat(cid, {
         timeout: FETCH_TIMEOUT,
       });
 
-      for await (const file of files) {
-        if (file.type !== 'file') {
-          throw new Error('This is not file.');
-        } else {
-          return file;
-        }
-      }
+      return { content, meta: fileMeta };
     } catch (error) {
       this.appActions.nodeErred(
         'I cannot find the file. Please wait for a while and try again.'
@@ -179,11 +190,11 @@ export class DownloadPageComponent implements OnInit, OnDestroy {
       const file = await this.searchFileByCID(v);
       this.loading = false;
 
-      if (!file) {
+      if (!file || !file.content) {
         return;
       }
 
-      if (isOver2gb(file)) {
+      if (isOver2gb(file.meta)) {
         this.setError(
           true,
           'This file is too large to download. Please do not download file over 2GB.'
@@ -191,7 +202,7 @@ export class DownloadPageComponent implements OnInit, OnDestroy {
         return;
       }
 
-      if (isOver100mb(file)) {
+      if (isOver100mb(file.meta)) {
         this.dialog
           .open<
             DownloadCautionDialogComponent,
@@ -201,7 +212,7 @@ export class DownloadPageComponent implements OnInit, OnDestroy {
             data: {
               title: 'Caution!',
               msg: `The file size is probably too large. It is ${floorToDigits(
-                biteToGb(file.size),
+                biteToGb(file.meta.size),
                 2
               )} GB.`,
             },
@@ -213,11 +224,11 @@ export class DownloadPageComponent implements OnInit, OnDestroy {
               this.clearInputs();
               return;
             }
-            this.prepareForDownload(file.content, file.name);
+            this.prepareForDownload(file.content, file.meta.name);
           });
       } else {
         // This file.name is CID.
-        this.prepareForDownload(file.content, file.name);
+        this.prepareForDownload(file.content, file.meta.name);
       }
     });
   }
