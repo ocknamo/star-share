@@ -3,7 +3,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { IPFSEntry } from 'ipfs-core-types/src/root';
-import { NgIpfsService } from 'ng-ipfs-service';
+import { AngularIpfsService } from 'angular-ipfs-service';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import {
@@ -64,7 +64,7 @@ export class DownloadPageComponent implements OnInit, OnDestroy {
   onDestroy$ = new Subject();
 
   constructor(
-    private readonly ipfsService: NgIpfsService,
+    private readonly ipfsService: AngularIpfsService,
     private readonly route: ActivatedRoute,
     private readonly appActions: AppActions,
     private readonly appStore: AppStore,

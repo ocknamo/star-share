@@ -10,7 +10,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgIpfsModule } from 'ng-ipfs-service';
+import { AngularIpfsModule } from 'angular-ipfs-service';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -51,7 +51,7 @@ import {
     FormsModule,
     ReactiveFormsModule,
     ClipboardModule,
-    NgIpfsModule,
+    AngularIpfsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
