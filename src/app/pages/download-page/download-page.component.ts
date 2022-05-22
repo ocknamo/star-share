@@ -2,8 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { IPFSEntry } from 'ipfs-core-types/src/root';
 import { AngularIpfsService } from 'angular-ipfs-service';
+import { IPFSEntry } from 'ipfs-core-types/src/root';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import {
