@@ -2,7 +2,7 @@ import { ElementRef, NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterTestingModule } from '@angular/router/testing';
-import { NgIpfsService } from 'ng-ipfs-service';
+import { AngularIpfsService } from 'angular-ipfs-service';
 
 import { AppComponent } from './app.component';
 import { ToolbarComponent } from './components';
@@ -18,7 +18,7 @@ describe('AppComponent', () => {
           useClass: MockElementRef,
         },
         {
-          provide: NgIpfsService,
+          provide: AngularIpfsService,
           useValue: {
             start: (): void => {},
             get: (): unknown => ({

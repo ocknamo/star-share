@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Component, Inject, OnInit } from '@angular/core';
+import { AngularIpfsService } from 'angular-ipfs-service';
 import { Config as IPFSConfig } from 'ipfs-core-types/src/config';
-import { NgIpfsService } from 'ng-ipfs-service';
 
 import { version } from '../../package.json';
 import { SWARM_ADDRESSES } from './providers/app-config';
@@ -19,7 +19,8 @@ export class AppComponent implements OnInit {
   appVersion = version;
 
   constructor(
-    @Inject(NgIpfsService) private readonly ipfsService: NgIpfsService,
+    @Inject(AngularIpfsService)
+    private readonly ipfsService: AngularIpfsService,
     @Inject(SWARM_ADDRESSES) private readonly swarmAddresses: string[],
     private readonly appActions: AppActions
   ) {}

@@ -1,6 +1,6 @@
 {
   "name": "star-share",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -30,7 +30,7 @@
     "@angular/platform-browser-dynamic": "~11.2.0",
     "@angular/router": "~11.2.0",
     "global": "^4.4.0",
-    "ng-ipfs-service": "^1.1.5",
+    "angular-ipfs-service": "^1.2.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "uint8arrays": "^2.1.2",

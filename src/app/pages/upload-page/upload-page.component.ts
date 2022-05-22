@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { NgIpfsService } from 'ng-ipfs-service';
+import { AngularIpfsService } from 'angular-ipfs-service';
 import { Subject } from 'rxjs';
 import { filter, take, takeUntil } from 'rxjs/operators';
 import { LocalStorageService } from 'src/app/common/local-storage.service';
@@ -44,7 +44,7 @@ export class UploadPageComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly el: ElementRef,
-    private readonly ipfsService: NgIpfsService,
+    private readonly ipfsService: AngularIpfsService,
     private readonly appStore: AppStore,
     private readonly dialog: MatDialog,
     private readonly storage: LocalStorageService

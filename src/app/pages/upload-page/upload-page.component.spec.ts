@@ -1,7 +1,7 @@
 import { ElementRef, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule } from '@angular/material/dialog';
-import { NgIpfsService } from 'ng-ipfs-service';
+import { AngularIpfsService } from 'angular-ipfs-service';
 
 import { MockElementRef } from './../../test/mock';
 import { UploadPageComponent } from './upload-page.component';
@@ -18,7 +18,7 @@ describe('UploadPageComponent', () => {
           useClass: MockElementRef,
         },
         {
-          provide: NgIpfsService,
+          provide: AngularIpfsService,
           useValue: {
             start: (): void => {},
             get: (): unknown => ({

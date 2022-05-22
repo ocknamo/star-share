@@ -2,7 +2,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { NgIpfsService } from 'ng-ipfs-service';
+import { AngularIpfsService } from 'angular-ipfs-service';
 
 import { DownloadPageComponent } from './download-page.component';
 
@@ -14,7 +14,7 @@ describe('DownloadPageComponent', () => {
     await TestBed.configureTestingModule({
       providers: [
         {
-          provide: NgIpfsService,
+          provide: AngularIpfsService,
           useValue: {
             start: (): void => {},
             get: (): unknown => ({
